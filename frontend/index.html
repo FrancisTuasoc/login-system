@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="card">
+    <h1>Welcome</h1>
+    <p class="subtitle">Sign in / Sign up to your account</p>
+
+    <form id="loginForm">
+      <label>Email</label>
+      <input type="email" id="email" required>
+
+      <label>Password</label>
+      <input type="password" id="password" required>
+
+      <button type="submit">Login</button>
+      <p id="message"></p>
+    </form>
+
+    <p id="loginPrompt" class="toggle-text">Don't have an account? <a href="#" id="showRegister">Register</a></p>
+
+    <form id="registerForm" class="hidden">
+      <label>Name</label>
+      <input type="text" id="name">
+
+      <label>Email</label>
+      <input type="email" id="regEmail">
+
+      <label>Password</label>
+      <input type="password" id="regPassword">
+
+      <button type="submit">Register</button>
+      <p id="registerMessage"></p>
+      <p id="registerPrompt" class="toggle-text hidden">Already have an account? <a href="#" id="showLogin">Login</a></p>
+    </form>
+  </main>
+
+  <script>
+    const API_URL = "http://localhost:5000";
+
+    const loginForm = document.getElementById("loginForm");
+    const registerForm = document.getElementById("registerForm");
+    const loginPrompt = document.getElementById("loginPrompt");
+    const registerPrompt = document.getElementById("registerPrompt");
+    const showRegister = document.getElementById("showRegister");
+    const showLogin = document.getElementById("showLogin");
+    const loginMessage = document.getElementById("message");
+    const registerMessage = document.getElementById("registerMessage");
+
+    function toggleForms(showLoginState) {
+      loginForm.classList.toggle("hidden", !showLoginState);
+      registerForm.classList.toggle("hidden", showLoginState);
+      loginPrompt.classList.toggle("hidden", !showLoginState);
+      registerPrompt.classList.toggle("hidden", showLoginState);
+    }
+
+    function clearRegistrationFields() {
+      document.getElementById("name").value = "";
+      document.getElementById("regEmail").value = "";
+      document.getElementById("regPassword").value = "";
+    }
+
+    showRegister.addEventListener("click", (event) => {
+      event.preventDefault();
+      registerMessage.textContent = "";
+      toggleForms(false);
+    });
+
+    showLogin.addEventListener("click", (event) => {
+      event.preventDefault();
+      loginMessage.textContent = "";
+      toggleForms(true);
+    });
+
+    registerForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      registerMessage.textContent = "";
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("regEmail").value.trim();
+      const password = document.getElementById("regPassword").value;
+
+      try {
+        const response = await fetch(`${API_URL}/api/register`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ name, email, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "Registration failed.");
+        }
+
+        registerMessage.textContent = data.message;
+        registerMessage.style.color = "green";
+        clearRegistrationFields();
+        setTimeout(() => {
+          toggleForms(true);
+          loginMessage.textContent = "Registration successful. Please login.";
+          loginMessage.style.color = "green";
+        }, 800);
+      } catch (error) {
+        registerMessage.textContent = error.message;
+        registerMessage.style.color = "red";
+      }
+    });
+
+    loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      loginMessage.textContent = "";
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      try {
+        const response = await fetch(`${API_URL}/api/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "Login failed.");
+        }
+
+        localStorage.setItem("token", data.token);
+        window.location.href = "dashboard.html";
+      } catch (error) {
+        loginMessage.textContent = error.message;
+        loginMessage.style.color = "red";
+      }
+    });
+  </script>
+</body>
+</html>

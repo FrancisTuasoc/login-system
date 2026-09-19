@@ -9,40 +9,87 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #f2f4f7;
+  background: linear-gradient(135deg, #f3f6fb, #eaf1ff);
 }
 
 .card {
-  width: 380px;
+  width: 420px;
   max-width: 90%;
-  padding: 32px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(0,0,0,.10);
+  padding: 32px 28px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 14px 32px rgba(33, 53, 86, 0.12);
 }
 
 h1, h2 {
   margin-top: 0;
   text-align: center;
+  color: #1f2937;
 }
 
-.card p{
-    text-align: center;
+.card p {
+  text-align: center;
 }
+
 .subtitle {
-  color: #666;
+  color: #6b7280;
+  margin-bottom: 22px;
+}
+
+.auth-form {
+  width: 100%;
 }
 
 label {
   display: block;
-  margin: 14px 0 6px;
+  margin: 14px 0 8px;
+  text-align: left;
+  color: #374151;
+  font-weight: 600;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+  width: 100%;
 }
 
 input {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+
+.show-password {
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  font-size: 0.9rem;
+  margin: 0;
+  width: auto;
+  font-weight: 500;
+  color: #4b5563;
+  cursor: pointer;
+}
+
+.show-password input {
+  width: auto;
+  margin: 0;
+  padding: 0;
+  accent-color: #4f46e5;
 }
 
 button {
@@ -50,14 +97,17 @@ button {
   margin-top: 18px;
   padding: 12px;
   border: 0;
-  border-radius: 6px;
-  background: #222;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #111827, #374151);
   color: white;
   cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
 button:hover {
-  opacity: .9;
+  opacity: 0.95;
+  transform: translateY(-1px);
 }
 
 .hidden {
@@ -83,4 +133,6 @@ button:hover {
 
 #message, #registerMessage {
   min-height: 20px;
+  margin-top: 12px;
+  text-align: left;
 }

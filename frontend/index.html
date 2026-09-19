@@ -11,12 +11,17 @@
     <h1>Welcome</h1>
     <p class="subtitle">Sign in / Sign up to your account</p>
 
-    <form id="loginForm">
+    <form id="loginForm" class="auth-form">
       <label>Email</label>
       <input type="email" id="email" required>
 
       <label>Password</label>
-      <input type="password" id="password" required>
+      <div class="field-group">
+        <input type="password" id="password" required>
+        <label class="show-password">
+          <input type="checkbox" data-target="password"> Show password
+        </label>
+      </div>
 
       <button type="submit">Login</button>
       <p id="message"></p>
@@ -24,7 +29,7 @@
 
     <p id="loginPrompt" class="toggle-text">Don't have an account? <a href="#" id="showRegister">Register</a></p>
 
-    <form id="registerForm" class="hidden">
+    <form id="registerForm" class="auth-form hidden">
       <label>Name</label>
       <input type="text" id="name">
 
@@ -32,7 +37,12 @@
       <input type="email" id="regEmail">
 
       <label>Password</label>
-      <input type="password" id="regPassword">
+      <div class="field-group">
+        <input type="password" id="regPassword">
+        <label class="show-password">
+          <input type="checkbox" data-target="regPassword"> Show password
+        </label>
+      </div>
 
       <button type="submit">Register</button>
       <p id="registerMessage"></p>
@@ -64,6 +74,17 @@
       document.getElementById("regEmail").value = "";
       document.getElementById("regPassword").value = "";
     }
+
+    document.querySelectorAll("[data-target]").forEach((checkbox) => {
+      checkbox.addEventListener("change", () => {
+        const targetId = checkbox.dataset.target;
+        const passwordInput = document.getElementById(targetId);
+
+        if (!passwordInput) return;
+
+        passwordInput.type = checkbox.checked ? "text" : "password";
+      });
+    });
 
     showRegister.addEventListener("click", (event) => {
       event.preventDefault();
